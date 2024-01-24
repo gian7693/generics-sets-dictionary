@@ -1,5 +1,7 @@
 ﻿using System;
-using Course.Models;
+using System.Globalization;
+using Course.Entities;
+using Course.Services;
 
 namespace Course // Note: actual namespace depends on the project name.
 {
@@ -7,20 +9,24 @@ namespace Course // Note: actual namespace depends on the project name.
     {
         static void Main(string[] args)
         {
-            PrintService<String> printService = new PrintService<String>();
+            List<Product> list = new List<Product>();
 
-            Console.Write("How many values? ");
+            Console.Write("Enter N: ");
             int n = int.Parse(Console.ReadLine());
 
             for(int i = 0; i < n; i++)
             {
-                string value = Console.ReadLine();
-                printService.AddValue(value);
+                string name = Console.ReadLine();
+                double price = int.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+                list.Add(new Product(name, price));
+
             }
 
-            printService.Print();
-            Console.WriteLine("First: " + printService.First());
-            
+            CalculationService calculationService = new CalculationService();
+
+            Product max = calculationService.Max(list);
+
+            Console.WriteLine($"Max: {max}");
         }
     }
 }
