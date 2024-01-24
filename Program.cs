@@ -1,7 +1,5 @@
-﻿using System;
-using System.Globalization;
+﻿using System; 
 using Course.Entities;
-using Course.Services;
 
 namespace Course // Note: actual namespace depends on the project name.
 {
@@ -9,24 +7,12 @@ namespace Course // Note: actual namespace depends on the project name.
     {
         static void Main(string[] args)
         {
-            List<Product> list = new List<Product>();
+            Client a = new Client() { Name = "Maria", Email = "maria@gmail.com" };
+            Client b = new Client() { Name = "Alex", Email = "maria@gmail.com" };
 
-            Console.Write("Enter N: ");
-            int n = int.Parse(Console.ReadLine());
-
-            for(int i = 0; i < n; i++)
-            {
-                string name = Console.ReadLine();
-                double price = int.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
-                list.Add(new Product(name, price));
-
-            }
-
-            CalculationService calculationService = new CalculationService();
-
-            Product max = calculationService.Max(list);
-
-            Console.WriteLine($"Max: {max}");
+            Console.WriteLine(a.Equals(b));
+            Console.WriteLine(a.GetHashCode());
+            Console.WriteLine(b.GetHashCode());
         }
     }
 }
