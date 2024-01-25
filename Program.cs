@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace Course // Note: actual namespace depends on the project name.
 {
@@ -7,34 +8,45 @@ namespace Course // Note: actual namespace depends on the project name.
     {
         static void Main(string[] args)
         {
-            Dictionary<string, string> cookies = new Dictionary<string, string>();
+            Dictionary<string, int> dictionary = new Dictionary<string, int>();
 
-            cookies["user"] = "Maria";
-            cookies["email"] = "maria@gmail.com";
-            cookies["phone"] = "(16) 99712234";
-            cookies["phone"] = "(15) 83737388";
+            Console.WriteLine("Enter file full path");
+            string path = Console.ReadLine();
 
-            Console.WriteLine(cookies["email"]);
-            Console.WriteLine(cookies["phone"]);
-
-            cookies.Remove("email");
-
-            if (cookies.ContainsKey("email"))
+            try
             {
-                Console.WriteLine(cookies["email"]);
+                using (StreamReader sr = File.OpenText(path))
+                {
+                    while (!sr.EndOfStream)
+                    {
+                        string[] votingRecord = sr.ReadLine().Split(',');
+                        string candidate = votingRecord[0];
+                        int votes = int.Parse(votingRecord[1]);
+
+                        if (dictionary.ContainsKey(candidate))
+                        {
+                            dictionary[candidate] += votes;
+                        }
+                        else
+                        {
+                            dictionary[candidate] = votes;
+                        }
+                    }
+
+                    foreach(var candidate in dictionary)
+                    {
+                        Console.WriteLine(candidate.Key + ": " + candidate.Value);
+                    }
+                }
             }
-            else
+            catch (IOException ex)
             {
-                Console.WriteLine("There's no 'email' key");
+                Console.WriteLine("An error ocurred");
+                Console.WriteLine(ex.Message);
             }
 
-            Console.WriteLine("Size: " + cookies.Count);
 
-            Console.WriteLine("ALL COOKIES: ");
-            foreach(KeyValuePair<string, string> item in cookies)
-            {
-                Console.WriteLine(item.Key + ": " + item.Value);
-            }
+
         }
     }
 }
