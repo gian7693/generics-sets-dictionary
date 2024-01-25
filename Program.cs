@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Drawing;
+using System.Security.Cryptography.X509Certificates;
 using Course.Entities;
 
 namespace Course // Note: actual namespace depends on the project name.
@@ -9,29 +10,49 @@ namespace Course // Note: actual namespace depends on the project name.
     {
         static void Main(string[] args)
         {
-            Console.Write("Enter file full path: ");
-            string path = Console.ReadLine();
+            HashSet<Student> turmaA = new HashSet<Student>();
+            HashSet<Student> turmaB = new HashSet<Student>();
+            HashSet<Student> turmaC = new HashSet<Student>();
 
-            HashSet<LogRecord> set = new HashSet<LogRecord>();
 
-            try
+            Console.Write("How many students for course A? ");
+            int nA = int.Parse(Console.ReadLine());
+            for (int i = 0; i < nA; i++)
             {
-                using(StreamReader sr = File.OpenText(path)) 
-                {
-                    while(!sr.EndOfStream)
-                    {
-                        string[] line = sr.ReadLine().Split(' ');
-                        LogRecord logRecord = new LogRecord(line[0], DateTime.Parse(line[1]));
-                        set.Add(logRecord);
-                    }
-
-                    Console.WriteLine("Total users: " + set.Count);
-                }
+                int cod = int.Parse(Console.ReadLine());
+                Student aluno = new Student(cod);
+                turmaA.Add(aluno);
             }
-            catch(IOException ex)
+            Console.Write("How many students for course B? ");
+            int nB = int.Parse(Console.ReadLine());
+            for (int i = 0; i < nB; i++)
             {
-                Console.WriteLine("An error ocurred");
-                Console.WriteLine(ex.Message);
+                int cod = int.Parse(Console.ReadLine());
+                Student aluno = new Student(cod);
+                turmaB.Add(aluno);
+            }
+            Console.Write("How many students for course C? ");
+            int nC = int.Parse(Console.ReadLine());
+            for (int i = 0; i < nC; i++)
+            {
+                int cod = int.Parse(Console.ReadLine());
+                Student aluno = new Student(cod);
+                turmaC.Add(aluno);
+            }
+
+            HashSet<Student> total = new HashSet<Student>(turmaA);
+            total.UnionWith(turmaB);
+            total.UnionWith(turmaC);
+
+            Console.WriteLine($"Total students: {total.Count}");
+            PrintCollection(total);
+        }
+
+        static void PrintCollection<T>(IEnumerable<T> collection)
+        {
+            foreach (T obj in collection)
+            {
+                Console.Write(obj + " ");
             }
         }
     }
