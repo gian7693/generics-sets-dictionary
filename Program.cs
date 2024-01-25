@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Numerics;
 using Course.Entities;
 
 namespace Course // Note: actual namespace depends on the project name.
@@ -8,19 +9,30 @@ namespace Course // Note: actual namespace depends on the project name.
     {
         static void Main(string[] args)
         {
-            HashSet<Product> a = new HashSet<Product>();
-            a.Add(new Product("TV", 900.00));
-            a.Add(new Product("Notebook", 1200.00));
+            Console.Write("Enter file full path: ");
+            string path = Console.ReadLine();
 
-            HashSet<Point> b = new HashSet<Point>();
-            b.Add(new Point(3, 4));
-            b.Add(new Point(5, 10));
+            HashSet<LogRecord> set = new HashSet<LogRecord>();
 
-            Product prod = new Product("Notebook", 1200.00);
-            Console.WriteLine(a.Contains(prod));
+            try
+            {
+                using(StreamReader sr = File.OpenText(path)) 
+                {
+                    while(!sr.EndOfStream)
+                    {
+                        string[] line = sr.ReadLine().Split(' ');
+                        LogRecord logRecord = new LogRecord(line[0], DateTime.Parse(line[1]));
+                        set.Add(logRecord);
+                    }
 
-            Point point = new Point(3, 4);
-            Console.WriteLine(b.Contains(point));
+                    Console.WriteLine("Total users: " + set.Count);
+                }
+            }
+            catch(IOException ex)
+            {
+                Console.WriteLine("An error ocurred");
+                Console.WriteLine(ex.Message);
+            }
         }
     }
 }
